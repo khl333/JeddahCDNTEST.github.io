@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Plyr HLS Stream Example</title>
+  <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" /> 
+  <style>
+    /* Add any custom CSS here, but be cautious of fullscreen conflicts */
+  </style>
+</head>
+<body>
+
+  <h1>Plyr HLS Stream Example</h1>
+
+  <video id="my-video" playsinline controls>
+    <source src="https://customer-533jls5oc9vh7yi0.cloudflarestream.com/02aded52b7748c8d53925ea523d27db1/manifest/video.m3u8" type="application/x-mpegURL">
+  </video>
+
+  <script src="https://cdn.plyr.io/3.7.2/plyr.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> 
+  <script>
+    // Initialize Plyr with fullscreen enabled
+    const player = new Plyr('#my-video', {
+      fullscreen: {
+        enabled: true 
+      }
+    });
+
+    // Optional: Check for HLS support (for older browsers)
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource('https://customer-533jls5oc9vh7yi0.cloudflarestream.com/02aded52b7748c8d53925ea523d27db1/manifest/video.m3u8');
+      hls.attachMedia(player.media);
+    } else if (player.media.canPlayType('application/vnd.apple.mpegurl')) {
+      player.source = {
+        type: 'video',
+        sources: [{
+          src: 'https://customer-533jls5oc9vh7yi0.cloudflarestream.com/02aded52b7748c8d53925ea523d27db1/manifest/video.m3u8',
+          type: 'application/vnd.apple.mpegurl'
+        }]
+      };
+    } 
+
+    // Debugging event listeners (optional)
+    player.on('enterfullscreen', event => {
+      console.log('Entered fullscreen');
+    });
+
+    player.on('exitfullscreen', event => {
+      console.log('Exited fullscreen');
+    });
+  </script>
+
+</body>
+</html>
